@@ -11,7 +11,6 @@ export const createExpertAccount = functions.https.onCall((data, context) => {
   const expert = {
     active: true,
     commentsCount: 0,
-    profileImage: null,
     rating: 0,
     ratingsCount: 0,
     ratingsSum: 0,
@@ -53,7 +52,7 @@ exports.onProfileImageUploaded = functions.storage.object().onFinalize(async (ob
     throw new functions.https.HttpsError("internal", "No file path");
   }
 
-  const uid = path.parse(filePath).base;
+  const uid = path.parse(filePath).name;
   const url = bucket.file(filePath).publicUrl();
   const data = {
     profileImage: url,
