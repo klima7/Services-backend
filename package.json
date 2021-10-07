@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@googlemaps/google-maps-services-js": "^3.2.2",
-    "firebase-admin": "^9.11.1",
-    "geofirestore": "^4.4.2"
-  }
-}
