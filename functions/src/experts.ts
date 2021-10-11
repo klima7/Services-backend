@@ -1,10 +1,8 @@
 import * as functions from "firebase-functions";
-import * as path from "path";
 import * as admin from "firebase-admin";
 import {ExpertInfo} from "./models";
 
 const firestore = admin.firestore();
-const bucket = admin.storage().bucket();
 
 
 export const createExpertAccount = functions.https.onCall((data, context) => {
@@ -45,18 +43,3 @@ export const setInfo = functions.https.onCall((data, context) => {
   });
 });
 
-
-exports.onProfileImageUploaded = functions.storage.object().onFinalize(async (object) => {
-  const filePath = object.name;
-  if (filePath == undefined) {
-    throw new functions.https.HttpsError("internal", "No file path");
-  }
-
-  const uid = path.parse(filePath).name;
-  const url = bucket.file(filePath).publicUrl();
-  const data = {
-    profileImage: url,
-  };
-
-  return firestore.collection("experts").doc(uid).update(data);
-});
