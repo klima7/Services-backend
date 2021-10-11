@@ -6,3 +6,7 @@ export class ExpertInfo {
   phone: string | undefined;
   website: string | undefined;
 }
+
+export interface SetServicesParams {
+  services: Array<string>;
+}
