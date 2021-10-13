@@ -14,7 +14,8 @@ const client = new SecretManagerServiceClient();
 export const testGeocoding = functions.https.onRequest(async (request, response) => {
   return gmClient.geocode({
     params: {
-      place_id: "ChIJd4k9VnDkG0cRgcHAll6lY6M",
+      language: "PL",
+      place_id: "ChIJAZ-GmmbMHkcR_NPqiCq-8HI",
       key: await secretsRepository.getSecret(Secret.geocodingApiKey),
     },
   }).then((r) => {

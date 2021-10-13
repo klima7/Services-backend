@@ -1,6 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import {SetInfoParams, SetServicesParams, SetWorkingAreaParams} from "./models";
+import {geocodingRepository} from "./geocoding";
 
 const firestore = admin.firestore();
 
@@ -56,11 +57,14 @@ export const setServices = functions.https.onCall((data, context) => {
 });
 
 
-export const setWorkingArea = functions.https.onCall((data, context) => {
+export const setWorkingArea = functions.https.onCall(async (data, context) => {
   const uid = context.auth?.uid;
   const params: SetWorkingAreaParams = data; // TODO: Validate
   if (uid == undefined) {
     throw new functions.https.HttpsError("internal", "Users is not authenticated");
   }
   console.log(`expert-setWorkingArea(${params.placeId}, ${params.radius})`);
+
+  const gcResult = await geocodingRepository.getLocationByPlaceId(params.placeId);
+  console.log("Geocoded lodation: " + JSON.stringify(gcResult));
 });

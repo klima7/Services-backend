@@ -1,5 +1,3 @@
-import * as admin from "firebase-admin";
-
 export interface SetInfoParams {
   name: string | undefined;
   company: string | undefined;
@@ -18,12 +16,16 @@ export interface SetWorkingAreaParams {
   radius: number;
 }
 
-export class NamedLocation {
-  coordinates: admin.firestore.GeoPoint;
+export class GeocodingResult {
+  latitude: number;
+  longitude: number;
   name: string;
+  country: string;
 
-  constructor(coordinates: admin.firestore.GeoPoint, name: string) {
-    this.coordinates = coordinates;
+  constructor(name: string, country: string, latitude: number, longitude: number) {
     this.name = name;
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.country = country;
   }
 }
