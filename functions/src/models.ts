@@ -1,4 +1,4 @@
-export class ExpertInfo {
+export interface SetInfoParams {
   name: string | undefined;
   company: string | undefined;
   description: string | undefined;
@@ -10,7 +10,6 @@ export class ExpertInfo {
 export interface SetServicesParams {
   services: Array<string>;
 }
-
 
 export interface SetWorkingAreaParams {
   placeId: string;

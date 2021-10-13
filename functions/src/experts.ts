@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import {ExpertInfo, SetServicesParams, SetWorkingAreaParams} from "./models";
+import {SetInfoParams, SetServicesParams, SetWorkingAreaParams} from "./models";
 
 const firestore = admin.firestore();
 
@@ -34,7 +34,7 @@ export const createExpertAccount = functions.https.onCall((data, context) => {
 
 export const setInfo = functions.https.onCall((data, context) => {
   const uid = context.auth?.uid;
-  const info: ExpertInfo = data; // TODO: Validate
+  const info: SetInfoParams = data; // TODO: Validate
   if (uid == undefined) {
     throw new functions.https.HttpsError("internal", "Users is not authenticated");
   }
