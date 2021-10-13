@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import {ExpertInfo, SetServicesParams} from "./models";
+import {ExpertInfo, SetServicesParams, SetWorkingAreaParams} from "./models";
 
 const firestore = admin.firestore();
 
@@ -53,4 +53,14 @@ export const setServices = functions.https.onCall((data, context) => {
   return firestore.collection("experts").doc(uid).update({
     services: params.services,
   });
+});
+
+
+export const setWorkingArea = functions.https.onCall((data, context) => {
+  const uid = context.auth?.uid;
+  const params: SetWorkingAreaParams = data; // TODO: Validate
+  if (uid == undefined) {
+    throw new functions.https.HttpsError("internal", "Users is not authenticated");
+  }
+  console.log(`expert-setWorkingArea(${params.placeId}, ${params.radius})`);
 });

@@ -10,3 +10,9 @@ export class ExpertInfo {
 export interface SetServicesParams {
   services: Array<string>;
 }
+
+
+export interface SetWorkingAreaParams {
+  placeId: string;
+  radius: number;
+}
