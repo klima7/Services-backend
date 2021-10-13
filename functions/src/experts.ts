@@ -66,5 +66,19 @@ export const setWorkingArea = functions.https.onCall(async (data, context) => {
   console.log(`expert-setWorkingArea(${params.placeId}, ${params.radius})`);
 
   const gcResult = await geocodingRepository.getLocationByPlaceId(params.placeId);
-  console.log("Geocoded lodation: " + JSON.stringify(gcResult));
+  console.log("Geocoded location: " + JSON.stringify(gcResult));
+
+  if (gcResult.country != "PL") {
+    throw new functions.https.HttpsError("internal", "Provided location is not in Poland");
+  }
+
+  await firestore.collection("experts").doc(uid).update({
+    workingArea: {
+      coordinates: new admin.firestore.GeoPoint(gcResult.latitude, gcResult.longitude),
+      locationName: gcResult.name,
+      radius: params.radius,
+    },
+  });
+
+  console.log("Working area in firestore updated");
 });
