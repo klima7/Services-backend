@@ -80,6 +80,7 @@ export const setWorkingArea = functions.https.onCall(async (data, context) => {
     workingArea: {
       coordinates: new admin.firestore.GeoPoint(gcResult.latitude, gcResult.longitude),
       locationName: gcResult.name,
+      locationId: params.placeId,
       radius: params.radius,
     },
   });
