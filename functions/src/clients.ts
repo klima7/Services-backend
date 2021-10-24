@@ -17,3 +17,19 @@ export const createClientAccount = functions.https.onCall((data, context) => {
     throw new functions.https.HttpsError("internal", "Users is not authenticated");
   }
 });
+
+export interface SetClientInfoParams {
+  name: string | undefined;
+  phone: string | undefined;
+}
+
+export const setInfo = functions.https.onCall((data, context) => {
+  const uid = context.auth?.uid;
+  const info: SetClientInfoParams = data; // TODO: Validate
+  if (uid == undefined) {
+    throw new functions.https.HttpsError("internal", "Users is not authenticated");
+  }
+  return firestore.collection("clients").doc(uid).update({
+    info: info,
+  });
+});
