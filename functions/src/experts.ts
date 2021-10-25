@@ -37,6 +37,11 @@ export const createExpertAccount = functions.https.onCall((data, context) => {
 });
 
 
+export const deleteAccount = functions.https.onCall((data, context) => {
+  console.log("Deleting account");
+});
+
+
 export const setInfo = functions.https.onCall((data, context) => {
   const uid = context.auth?.uid;
   const info: SetInfoParams = data; // TODO: Validate
@@ -110,5 +115,4 @@ exports.onProfileImageUploaded = functions.storage.object().onFinalize(async (ob
 
   await firestore.collection("experts").doc(uid).update(data);
 });
-
 

@@ -18,6 +18,12 @@ export const createClientAccount = functions.https.onCall((data, context) => {
   }
 });
 
+
+export const deleteAccount = functions.https.onCall((data, context) => {
+  console.log("Deleting account");
+});
+
+
 export interface SetClientInfoParams {
   name: string | undefined;
   phone: string | undefined;
