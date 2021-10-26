@@ -79,3 +79,11 @@ async function accessSecretVersion(): Promise<string> {
   console.log(`Payload: ${payload}`);
   return (payload == undefined) ? "Undefined" : payload;
 }
+
+
+export const testSelect = functions.https.onRequest(async (request, response) => {
+  const res = await firestore.collection("jobs").listDocuments();
+  const ids = res.map((it) => it.id);
+  console.log(ids);
+  response.send(ids);
+});
