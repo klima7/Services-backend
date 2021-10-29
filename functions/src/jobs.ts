@@ -11,6 +11,13 @@ export const getAvailableIds = functions.https.onCall(async (data, context) => {
 });
 
 
+export const getRejectedIds = functions.https.onCall(async (data, context) => {
+  const res = await firestore.collection("jobs").listDocuments();
+  const ids = res.map((it) => it.id);
+  return ids;
+});
+
+
 export const accept = functions.https.onCall(async (data, context) => {
   console.log("Accepting job");
 });
