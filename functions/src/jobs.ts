@@ -9,3 +9,13 @@ export const getAvailableIds = functions.https.onCall(async (data, context) => {
   const ids = res.map((it) => it.id);
   return ids;
 });
+
+
+export const accept = functions.https.onCall(async (data, context) => {
+  console.log("Accepting job");
+});
+
+
+export const reject = functions.https.onCall(async (data, context) => {
+  console.log("Rejecting job");
+});
