@@ -17,6 +17,15 @@ export const getRejectedIds = functions.https.onCall(async (data, context) => {
   return ids;
 });
 
+export const getJobStatus = functions.https.onCall(async (data, context) => {
+  // 0 - new
+  // 1 - rejected
+  // 2 - accepted
+  return {
+    status: 1,
+  };
+});
+
 
 export const accept = functions.https.onCall(async (data, context) => {
   console.log("Accepting job");
