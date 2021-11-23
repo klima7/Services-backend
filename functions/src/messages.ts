@@ -1,6 +1,5 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-// import * as path from "path";
 import {getDownloadUrl} from "./utils";
 
 const firestore = admin.firestore();
@@ -46,7 +45,7 @@ exports.onImageUploaded = functions.storage.object().onFinalize(async (object) =
   // Write to firestore
   const data = {
     author: uid,
-    data: await getDownloadUrl(bucket.file(filePath)),
+    imageUrl: await getDownloadUrl(bucket.file(filePath)),
     time: admin.firestore.FieldValue.serverTimestamp(),
     type: 1,
   };

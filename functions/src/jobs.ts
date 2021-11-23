@@ -35,3 +35,15 @@ export const accept = functions.https.onCall(async (data, context) => {
 export const reject = functions.https.onCall(async (data, context) => {
   console.log("Rejecting job");
 });
+
+
+export const finish = functions.https.onCall(async (data, context) => {
+  const uid = context.auth?.uid;
+  if (uid == undefined) {
+    throw new functions.https.HttpsError("internal", "User is not authenticated");
+  }
+
+  const jobId = data.id;
+
+  await firestore.collection("jobs").doc(jobId).update({active: false});
+});
