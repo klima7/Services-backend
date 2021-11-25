@@ -47,3 +47,9 @@ export const finish = functions.https.onCall(async (data, context) => {
 
   await firestore.collection("jobs").doc(jobId).update({active: false});
 });
+
+
+export const create = functions.https.onCall(async (data, context) => {
+  console.log("Creating job");
+  await new Promise((f) => setTimeout(f, 500));
+});
