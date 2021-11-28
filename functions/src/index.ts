@@ -2,15 +2,13 @@ import * as admin from "firebase-admin";
 
 admin.initializeApp();
 
-import * as tests from "./tests";
-import * as experts from "./experts";
-import * as clients from "./clients";
-import * as jobs from "./jobs";
-import * as offers from "./offers";
-import * as messages from "./messages";
-import * as ratings from "./ratings";
+import * as experts from "./services/experts";
+import * as clients from "./services/clients";
+import * as jobs from "./services/jobs";
+import * as offers from "./services/offers";
+import * as messages from "./services/messages";
+import * as ratings from "./services/ratings";
 
-exports.tests = tests;
 exports.experts = experts;
 exports.clients = clients;
 exports.jobs = jobs;

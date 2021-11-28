@@ -29,3 +29,30 @@ export class GeocodingResult {
     this.country = country;
   }
 }
+
+export interface Rating {
+  clientName: string;
+  comment: string | undefined;
+  data: any;
+  expertId: string;
+  offerId: string;
+  rating: number;
+  serviceName: string;
+}
+
+export interface Offer {
+  archived: boolean;
+  clientId: string;
+  clientName: string;
+  clientReadTime: any;
+  creationTime: any;
+  expertId: string;
+  expertName: string;
+  expertReadTime: any;
+  isPreferred: boolean;
+  jobId: string;
+  ratingId: string | undefined;
+  serviceId: string;
+  serviceName: string;
+  status: number;
+}

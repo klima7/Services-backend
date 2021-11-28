@@ -1,11 +1,11 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import {getDownloadUrl} from "./utils";
+import {getDownloadUrl} from "utils";
 
 const firestore = admin.firestore();
 const bucket = admin.storage().bucket();
 
-exports.onImageUploaded = functions.storage.object().onFinalize(async (object) => {
+export const onImageUploaded = functions.storage.object().onFinalize(async (object) => {
   const filePath = object.name;
   if (filePath == undefined) {
     throw new functions.https.HttpsError("internal", "No file path");
