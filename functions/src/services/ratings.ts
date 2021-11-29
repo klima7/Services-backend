@@ -31,6 +31,10 @@ export const add = functions.https.onCall(async (data, context) => {
 
   const offer = (await firestore.collection("offers").doc(params.offerId).get()).data() as Offer;
 
+  if (offer.ratingId != null) {
+    throw new functions.https.HttpsError("failed-precondition", "Rating already added");
+  }
+
   const ratingData: Rating = {
     clientName: offer.clientName,
     comment: params.comment,
