@@ -15,9 +15,15 @@ export const createAccount = functions.https.onCall(async (_data, context) => {
     throw new functions.https.HttpsError("unauthenticated", "User is not authenticated");
   }
 
+  // Check whether expert has an account
+  const expert = (await firestore.collection("experts").doc(uid).get()).data() as Expert;
+  if (expert != null) {
+    throw new functions.https.HttpsError("failed-precondition", "User already have expert account");
+  }
+
   const user = await admin.auth().getUser(uid);
 
-  const expert: Expert = {
+  const expertData: Expert = {
     commentsCount: 0,
     rating: 0,
     ratingsCount: 0,
@@ -36,13 +42,15 @@ export const createAccount = functions.https.onCall(async (_data, context) => {
     services: [],
   };
 
-  return firestore.collection("experts").doc(uid).set(expert);
+  return firestore.collection("experts").doc(uid).set(expertData);
 });
 
 
 export const deleteAccount = functions.https.onCall((_data, _context) => {
   console.log("Deleting account");
+  // TODO: implement
 });
+
 
 interface SetInfoParams {
   name: string | undefined;

@@ -12,16 +12,22 @@ export const createAccount = functions.https.onCall(async (_data, context) => {
     throw new functions.https.HttpsError("unauthenticated", "User is not authenticated");
   }
 
+  // Check whether client has an account
+  const client = (await firestore.collection("clients").doc(uid).get()).data() as Client;
+  if (client != null) {
+    throw new functions.https.HttpsError("failed-precondition", "User already have client account");
+  }
+
   const user = await admin.auth().getUser(uid);
 
-  const client: Client = {
+  const clientData: Client = {
     info: {
       name: user.displayName || null,
       phone: null,
     },
   };
 
-  return firestore.collection("clients").doc(uid).set(client);
+  return firestore.collection("clients").doc(uid).set(clientData);
 });
 
 
