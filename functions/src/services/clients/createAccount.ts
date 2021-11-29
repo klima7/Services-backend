@@ -1,9 +1,8 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import {Client} from "../interfaces/firestore";
+import {Client} from "../../interfaces/firestore";
 
 const firestore = admin.firestore();
-
 
 export const createAccount = functions.https.onCall(async (_data, context) => {
   const uid = context.auth?.uid;
