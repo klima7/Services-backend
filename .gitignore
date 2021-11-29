@@ -65,6 +65,5 @@ node_modules/
 # dotenv environment variables file
 .env
 
-# Custom .gitignore
+# Custom ignores
 commands.txt
-services-a7389-58abc2b26915.json
