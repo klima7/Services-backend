@@ -5,6 +5,7 @@ import {ExpertUpdate, Offer, Rating} from "../interfaces/firestore";
 
 const firestore = admin.firestore();
 
+
 abstract class AddParams {
   abstract offerId: string;
   abstract rating: number;
