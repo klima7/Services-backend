@@ -9,7 +9,6 @@ const bucket = admin.storage().bucket();
 
 export const createExpertAccount = functions.https.onCall((data, context) => {
   const expert = {
-    active: true,
     commentsCount: 0,
     rating: 0,
     ratingsCount: 0,
