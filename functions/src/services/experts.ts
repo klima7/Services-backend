@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as path from "path";
-import {SetInfoParams, SetServicesParams, SetWorkingAreaParams} from "../interfaces/models";
+import {SetInfoParams, SetServicesParams, SetWorkingAreaParams} from "../interfaces/firestore";
 import {geocodingRepository} from "../utils/geocoding";
 import {getDownloadUrl} from "../utils/firestore";
 

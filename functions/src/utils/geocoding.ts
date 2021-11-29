@@ -1,5 +1,5 @@
 import {AddressType, Client} from "@googlemaps/google-maps-services-js";
-import {GeocodingResult} from "../interfaces/models";
+import {GeocodingResult} from "../interfaces/firestore";
 import {secretsRepository, Secret} from "./secrets";
 
 class GeocodingRepository {
