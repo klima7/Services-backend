@@ -1,6 +1,19 @@
 import {AddressType, Client} from "@googlemaps/google-maps-services-js";
-import {GeocodingResult} from "../interfaces/firestore";
 import {secretsRepository, Secret} from "./secrets";
+
+export class GeocodingResult {
+  latitude: number;
+  longitude: number;
+  name: string;
+  country: string;
+
+  constructor(name: string, country: string, latitude: number, longitude: number) {
+    this.name = name;
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.country = country;
+  }
+}
 
 class GeocodingRepository {
   private gmClient = new Client();

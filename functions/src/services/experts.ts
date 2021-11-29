@@ -1,13 +1,11 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as path from "path";
-import {SetInfoParams, SetServicesParams, SetWorkingAreaParams} from "../interfaces/firestore";
 import {geocodingRepository} from "../utils/geocoding";
 import {getDownloadUrl} from "../utils/firestore";
 
 const firestore = admin.firestore();
 const bucket = admin.storage().bucket();
-
 
 export const createExpertAccount = functions.https.onCall((data, context) => {
   const expert = {
@@ -36,11 +34,18 @@ export const createExpertAccount = functions.https.onCall((data, context) => {
   }
 });
 
-
 export const deleteAccount = functions.https.onCall((_data, _context) => {
   console.log("Deleting account");
 });
 
+interface SetInfoParams {
+  name: string | undefined;
+  company: string | undefined;
+  description: string | undefined;
+  email: string | undefined;
+  phone: string | undefined;
+  website: string | undefined;
+}
 
 export const setInfo = functions.https.onCall((data, context) => {
   const uid = context.auth?.uid;
@@ -53,6 +58,9 @@ export const setInfo = functions.https.onCall((data, context) => {
   });
 });
 
+interface SetServicesParams {
+  services: Array<string>;
+}
 
 export const setServices = functions.https.onCall((data, context) => {
   const uid = context.auth?.uid;
@@ -65,6 +73,10 @@ export const setServices = functions.https.onCall((data, context) => {
   });
 });
 
+interface SetWorkingAreaParams {
+  placeId: string;
+  radius: number;
+}
 
 export const setWorkingArea = functions.https.onCall(async (data, context) => {
   const uid = context.auth?.uid;
@@ -92,7 +104,6 @@ export const setWorkingArea = functions.https.onCall(async (data, context) => {
 
   console.log("Working area in firestore updated");
 });
-
 
 exports.onProfileImageUploaded = functions.storage.object().onFinalize(async (object) => {
   const filePath = object.name;
