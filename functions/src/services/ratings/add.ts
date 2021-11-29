@@ -10,13 +10,15 @@ abstract class AddParams {
   abstract offerId: string;
   abstract rating: number;
   abstract comment: string | null;
-
-  static schema = Joi.object({
-    offerId: Joi.string().required(),
-    rating: Joi.number().required().min(0).max(5),
-    comment: Joi.string().allow(null).max(500),
-  });
 }
+
+
+const schemaAddParams = Joi.object({
+  offerId: Joi.string().required(),
+  rating: Joi.number().required().min(0).max(5),
+  comment: Joi.string().allow(null).max(500),
+});
+
 
 export const add = functions.https.onCall(async (data, context) => {
   const uid = context.auth?.uid;
@@ -25,7 +27,7 @@ export const add = functions.https.onCall(async (data, context) => {
   }
 
   const params: AddParams = data;
-  const validation = AddParams.schema.validate(params);
+  const validation = schemaAddParams.validate(params);
   if (validation.error) {
     throw new functions.https.HttpsError("invalid-argument", "Invalid parameters passed");
   }

@@ -4,10 +4,12 @@ import {geocodingRepository} from "../../utils/geocoding";
 
 const firestore = admin.firestore();
 
+
 interface SetWorkingAreaParams {
   placeId: string;
   radius: number;
 }
+
 
 export const setWorkingArea = functions.https.onCall(async (data, context) => {
   const uid = context.auth?.uid;

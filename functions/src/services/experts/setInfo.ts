@@ -3,6 +3,7 @@ import * as admin from "firebase-admin";
 
 const firestore = admin.firestore();
 
+
 interface SetInfoParams {
   name: string | undefined;
   company: string | undefined;
@@ -11,6 +12,7 @@ interface SetInfoParams {
   phone: string | undefined;
   website: string | undefined;
 }
+
 
 export const setInfo = functions.https.onCall((data, context) => {
   const uid = context.auth?.uid;

@@ -6,6 +6,7 @@ import {getDownloadUrl} from "../../utils/firestore";
 const firestore = admin.firestore();
 const bucket = admin.storage().bucket();
 
+
 export const onProfileImageUploaded = functions.storage.object().onFinalize(async (object) => {
   const filePath = object.name;
   if (filePath == undefined) {

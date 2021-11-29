@@ -3,9 +3,11 @@ import * as admin from "firebase-admin";
 
 const firestore = admin.firestore();
 
+
 interface SetServicesParams {
   services: Array<string>;
 }
+
 
 export const setServices = functions.https.onCall((data, context) => {
   const uid = context.auth?.uid;

@@ -5,15 +5,18 @@ import * as Joi from "joi";
 
 const firestore = admin.firestore();
 
+
 abstract class SetInfoParams {
   abstract name: string | null;
   abstract phone: string | null;
-
-  static schema = Joi.object({
-    name: Joi.string().required().min(1).max(40),
-    phone: Joi.string().allow(null).length(9),
-  });
 }
+
+
+const schemaSetInfoParams = Joi.object({
+  name: Joi.string().required().min(1).max(40),
+  phone: Joi.string().allow(null).length(9),
+});
+
 
 export const setInfo = functions.https.onCall(async (data, context) => {
   const uid = context.auth?.uid;
@@ -22,7 +25,7 @@ export const setInfo = functions.https.onCall(async (data, context) => {
   }
 
   const params: SetInfoParams = data;
-  const validation = SetInfoParams.schema.validate(params);
+  const validation = schemaSetInfoParams.validate(params);
   if (validation.error) {
     throw new functions.https.HttpsError("invalid-argument", "Invalid parameters passed");
   }

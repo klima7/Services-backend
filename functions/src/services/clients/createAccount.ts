@@ -4,6 +4,7 @@ import {Client} from "../../interfaces/firestore";
 
 const firestore = admin.firestore();
 
+
 export const createAccount = functions.https.onCall(async (_data, context) => {
   const uid = context.auth?.uid;
   if (uid == undefined) {

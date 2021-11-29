@@ -3,6 +3,7 @@ import * as admin from "firebase-admin";
 
 const firestore = admin.firestore();
 
+
 export const finish = functions.https.onCall(async (data, context) => {
   const uid = context.auth?.uid;
   if (uid == undefined) {

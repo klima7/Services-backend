@@ -4,6 +4,7 @@ import * as path from "path";
 
 const firestore = admin.firestore();
 
+
 export const onProfileImageDeleted = functions.storage.object().onDelete(async (object) => {
   const filePath = object.name;
   if (filePath == undefined) {
