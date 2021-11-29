@@ -8,8 +8,16 @@ import {Expert} from "../interfaces/firestore";
 const firestore = admin.firestore();
 const bucket = admin.storage().bucket();
 
-export const createExpertAccount = functions.https.onCall((data, context) => {
-  const expert = {
+
+export const createAccount = functions.https.onCall(async (_data, context) => {
+  const uid = context.auth?.uid;
+  if (uid == undefined) {
+    throw new functions.https.HttpsError("unauthenticated", "User is not authenticated");
+  }
+
+  const user = await admin.auth().getUser(uid);
+
+  const expert: Expert = {
     commentsCount: 0,
     rating: 0,
     ratingsCount: 0,
@@ -19,7 +27,7 @@ export const createExpertAccount = functions.https.onCall((data, context) => {
       company: null,
       description: null,
       email: null,
-      name: null,
+      name: user.displayName || null,
       phone: null,
       website: null,
     },
@@ -27,12 +35,10 @@ export const createExpertAccount = functions.https.onCall((data, context) => {
     workingArea: null,
     services: [],
   };
-  if (context.auth != null) {
-    return firestore.collection("experts").doc(context.auth.uid).set(expert);
-  } else {
-    throw new functions.https.HttpsError("internal", "Users is not authenticated");
-  }
+
+  return firestore.collection("experts").doc(uid).set(expert);
 });
+
 
 export const deleteAccount = functions.https.onCall((_data, _context) => {
   console.log("Deleting account");
