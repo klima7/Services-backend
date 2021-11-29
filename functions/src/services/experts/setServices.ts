@@ -22,6 +22,12 @@ export const setServices = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError("unauthenticated", "User is not authenticated");
   }
 
+  // Check whether user have expert account
+  const expert = (await firestore.collection("experts").doc(uid).get()).data() as ExpertUpdate;
+  if (expert == null) {
+    throw new functions.https.HttpsError("failed-precondition", "User does not have expert account");
+  }
+
   const params: SetServicesParams = data;
   const validation = schemaSetServicesParams.validate(params);
   if (validation.error) {

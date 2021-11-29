@@ -11,7 +11,7 @@ export const createAccount = functions.https.onCall(async (_data, context) => {
     throw new functions.https.HttpsError("unauthenticated", "User is not authenticated");
   }
 
-  // Check whether expert has an account
+  // Check whether expert already has an account
   const expert = (await firestore.collection("experts").doc(uid).get()).data() as Expert;
   if (expert != null) {
     throw new functions.https.HttpsError("failed-precondition", "User already have expert account");
