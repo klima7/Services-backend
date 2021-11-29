@@ -1,3 +1,5 @@
+import * as admin from "firebase-admin";
+
 export interface SetInfoParams {
   name: string | undefined;
   company: string | undefined;
@@ -33,7 +35,7 @@ export class GeocodingResult {
 export interface Rating {
   clientName: string;
   comment: string | undefined;
-  data: any;
+  data: admin.firestore.Timestamp;
   expertId: string;
   offerId: string;
   rating: number;
@@ -44,11 +46,11 @@ export interface Offer {
   archived: boolean;
   clientId: string;
   clientName: string;
-  clientReadTime: any;
-  creationTime: any;
+  clientReadTime: admin.firestore.Timestamp;
+  creationTime: admin.firestore.Timestamp;
   expertId: string;
   expertName: string;
-  expertReadTime: any;
+  expertReadTime: admin.firestore.Timestamp;
   isPreferred: boolean;
   jobId: string;
   ratingId: string | undefined;
