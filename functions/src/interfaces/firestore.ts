@@ -7,29 +7,29 @@ export interface Client {
 }
 
 export interface ClientInfo {
-  name: string | undefined;
-  phone: string | undefined;
+  name: string | null;
+  phone: string | null;
 }
 
 export interface Expert {
   commentsCount: number;
-  profileImage: string | undefined;
+  profileImage: string | null;
   rating: number;
   ratingsCount: number;
   ratingsSum: number;
   ready: boolean;
   info: ExpertInfo;
-  workingArea: ExpertWorkingArea | undefined;
+  workingArea: ExpertWorkingArea | null;
   services: Array<string>;
 }
 
 export interface ExpertInfo {
-  company: string | undefined;
-  description: string | undefined;
-  email: string | undefined;
-  name: string | undefined;
-  phone: string | undefined;
-  website: string | undefined;
+  company: string | null;
+  description: string | null;
+  email: string | null;
+  name: string | null;
+  phone: string | null;
+  website: string | null;
 }
 
 export interface ExpertWorkingArea {
@@ -41,7 +41,7 @@ export interface ExpertWorkingArea {
 
 export interface Rating {
   clientName: string;
-  comment: string | undefined;
+  comment: string | null;
   date: Timestamp;
   expertId: string;
   offerId: string;
@@ -60,7 +60,7 @@ export interface Offer {
   expertReadTime: Timestamp;
   isPreferred: boolean;
   jobId: string;
-  ratingId: string | undefined;
+  ratingId: string | null;
   serviceId: string;
   serviceName: string;
   status: number;
@@ -68,7 +68,7 @@ export interface Offer {
 
 export interface Job {
   active: boolean;
-  clientId: string | undefined;
+  clientId: string | null;
   clientName: string;
   creation: Timestamp;
   description: string;

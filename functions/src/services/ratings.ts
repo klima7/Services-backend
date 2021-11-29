@@ -1,14 +1,21 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import {Offer} from "../interfaces/firestore";
+import * as Joi from "joi";
+import {Offer, Rating} from "../interfaces/firestore";
 
 const firestore = admin.firestore();
 
 interface AddParams {
   offerId: string;
   rating: number;
-  comment: string;
+  comment: string | null;
 }
+
+const schemaAddParams = Joi.object({
+  offerId: Joi.string().required(),
+  rating: Joi.number().required().min(0).max(5),
+  comment: Joi.string().allow(null).max(500),
+});
 
 export const add = functions.https.onCall(async (data, context) => {
   const uid = context.auth?.uid;
@@ -17,10 +24,14 @@ export const add = functions.https.onCall(async (data, context) => {
   }
 
   const params: AddParams = data;
+  const validation = schemaAddParams.validate(params);
+  if (validation.error) {
+    throw new functions.https.HttpsError("internal", "Invalid parameters");
+  }
 
   const offer = (await firestore.collection("offers").doc(params.offerId).get()).data() as Offer;
 
-  const ratingData = {
+  const ratingData: Rating = {
     clientName: offer.clientName,
     comment: params.comment,
     date: admin.firestore.FieldValue.serverTimestamp(),
