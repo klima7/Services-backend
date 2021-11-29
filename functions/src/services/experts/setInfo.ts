@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as Joi from "joi";
-import {ExpertUpdate} from "../../interfaces/firestore";
+import {Expert, ExpertUpdate} from "../../interfaces/firestore";
 
 const firestore = admin.firestore();
 
@@ -38,8 +38,8 @@ export const setInfo = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError("invalid-argument", "Invalid parameters passed");
   }
 
-  // Check whether expert has an account
-  const expert = (await firestore.collection("experts").doc(uid).get()).data() as ExpertUpdate;
+  // Check whether user has an expert account
+  const expert = (await firestore.collection("experts").doc(uid).get()).data() as Expert;
   if (expert == null) {
     throw new functions.https.HttpsError("failed-precondition", "User does not have expert account");
   }
