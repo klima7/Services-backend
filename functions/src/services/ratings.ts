@@ -20,13 +20,13 @@ const schemaAddParams = Joi.object({
 export const add = functions.https.onCall(async (data, context) => {
   const uid = context.auth?.uid;
   if (uid == undefined) {
-    throw new functions.https.HttpsError("internal", "User is not authenticated");
+    throw new functions.https.HttpsError("unauthenticated", "User is not authenticated");
   }
 
   const params: AddParams = data;
   const validation = schemaAddParams.validate(params);
   if (validation.error) {
-    throw new functions.https.HttpsError("internal", "Invalid parameters");
+    throw new functions.https.HttpsError("invalid-argument", "Invalid parameters passed");
   }
 
   const offer = (await firestore.collection("offers").doc(params.offerId).get()).data() as Offer;
@@ -43,7 +43,7 @@ export const add = functions.https.onCall(async (data, context) => {
 
   const ratingRef = await firestore.collection("ratings").add(ratingData);
 
-  const offerData = {
+  const offerData: Partial<Offer> = {
     ratingId: ratingRef.id,
   };
 
