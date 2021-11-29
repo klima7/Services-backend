@@ -18,7 +18,7 @@ export interface Expert extends ExpertUpdate {
 
 export interface ExpertUpdate {
   commentsCount: number;
-  profileImage: string | null;
+  profileImage: ExpertProfileImage | null;
   rating: number;
   ratingsCount: number | admin.firestore.FieldValue;
   ratingsSum: number | admin.firestore.FieldValue;
@@ -42,6 +42,11 @@ export interface ExpertWorkingArea {
   locationId: string;
   locationName: string;
   radius: number;
+}
+
+export interface ExpertProfileImage {
+  changeTime: Timestamp,
+  url: string,
 }
 
 export interface Rating {

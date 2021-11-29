@@ -2,6 +2,7 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as path from "path";
 import {getDownloadUrl} from "../../utils/firestore";
+import {Expert, ExpertUpdate} from "../../interfaces/firestore";
 
 const firestore = admin.firestore();
 const bucket = admin.storage().bucket();
@@ -19,12 +20,18 @@ export const onProfileImageUploaded = functions.storage.object().onFinalize(asyn
 
   const uid = path.parse(filePath).name;
 
-  const data = {
+  // Check whether user has expert account
+  const expert = (await firestore.collection("experts").doc(uid).get()).data() as Expert;
+  if (expert == null) {
+    throw new functions.https.HttpsError("failed-precondition", "User does not have expert account");
+  }
+
+  const expertData: Partial<ExpertUpdate> = {
     profileImage: {
       url: await getDownloadUrl(bucket.file(filePath)),
       changeTime: admin.firestore.FieldValue.serverTimestamp(),
     },
   };
 
-  await firestore.collection("experts").doc(uid).update(data);
+  await firestore.collection("experts").doc(uid).update(expertData);
 });
