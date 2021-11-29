@@ -5,4 +5,4 @@ export * from "./setServices";
 export * from "./setWorkingArea";
 export * from "./onProfileImageUploaded";
 export * from "./onProfileImageDeleted";
-export * from "./onUpdateSetRanking";
+export * from "./onUpdateSetRating";
