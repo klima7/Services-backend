@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as Joi from "joi";
-import {ExpertUpdate, Offer, Rating} from "../interfaces/firestore";
+import {ExpertUpdate, Offer, Rating} from "../../interfaces/firestore";
 
 const firestore = admin.firestore();
 
