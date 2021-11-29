@@ -37,7 +37,7 @@ export const createExpertAccount = functions.https.onCall((data, context) => {
 });
 
 
-export const deleteAccount = functions.https.onCall((data, context) => {
+export const deleteAccount = functions.https.onCall((_data, _context) => {
   console.log("Deleting account");
 });
 

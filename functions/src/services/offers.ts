@@ -8,8 +8,8 @@ export interface SetOfferArchivedParams {
   archived: boolean;
 }
 
-export const setOfferArchived = functions.https.onCall(async (data: any, context) => {
-  const params: SetOfferArchivedParams = data;
+export const setOfferArchived = functions.https.onCall(async (_data, _context) => {
+  const params: SetOfferArchivedParams = _data;
   console.log("Accepting job");
   await firestore.collection("offers").doc(params.offerId).update({
     archived: params.archived,
