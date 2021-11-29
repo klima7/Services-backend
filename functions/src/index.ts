@@ -4,7 +4,7 @@ admin.initializeApp();
 
 import * as experts from "./services/experts/index";
 import * as clients from "./services/clients/index";
-import * as jobs from "./services/jobs";
+import * as jobs from "./services/jobs/index";
 import * as offers from "./services/offers";
 import * as messages from "./services/messages";
 import * as ratings from "./services/ratings";
