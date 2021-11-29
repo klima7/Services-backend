@@ -11,12 +11,17 @@ export interface ClientInfo {
   phone: string | null;
 }
 
-export interface Expert {
+export interface Expert extends ExpertUpdate {
+  ratingsCount: number;
+  ratingsSum: number;
+}
+
+export interface ExpertUpdate {
   commentsCount: number;
   profileImage: string | null;
   rating: number;
-  ratingsCount: number;
-  ratingsSum: number;
+  ratingsCount: number | admin.firestore.FieldValue;
+  ratingsSum: number | admin.firestore.FieldValue;
   ready: boolean;
   info: ExpertInfo;
   workingArea: ExpertWorkingArea | null;
@@ -51,11 +56,11 @@ export interface Rating {
 
 export interface Offer {
   archived: boolean;
-  clientId: string;
+  clientId: string | null;
   clientName: string;
   clientReadTime: Timestamp;
   creationTime: Timestamp;
-  expertId: string;
+  expertId: string | null;
   expertName: string;
   expertReadTime: Timestamp;
   isPreferred: boolean;

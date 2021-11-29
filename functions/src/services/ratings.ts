@@ -1,21 +1,21 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as Joi from "joi";
-import {Offer, Rating} from "../interfaces/firestore";
+import {ExpertUpdate, Offer, Rating} from "../interfaces/firestore";
 
 const firestore = admin.firestore();
 
-interface AddParams {
-  offerId: string;
-  rating: number;
-  comment: string | null;
-}
+abstract class AddParams {
+  abstract offerId: string;
+  abstract rating: number;
+  abstract comment: string | null;
 
-const schemaAddParams = Joi.object({
-  offerId: Joi.string().required(),
-  rating: Joi.number().required().min(0).max(5),
-  comment: Joi.string().allow(null).max(500),
-});
+  static schema = Joi.object({
+    offerId: Joi.string().required(),
+    rating: Joi.number().required().min(0).max(5),
+    comment: Joi.string().allow(null).max(500),
+  });
+}
 
 export const add = functions.https.onCall(async (data, context) => {
   const uid = context.auth?.uid;
@@ -24,7 +24,7 @@ export const add = functions.https.onCall(async (data, context) => {
   }
 
   const params: AddParams = data;
-  const validation = schemaAddParams.validate(params);
+  const validation = AddParams.schema.validate(params);
   if (validation.error) {
     throw new functions.https.HttpsError("invalid-argument", "Invalid parameters passed");
   }
@@ -33,6 +33,10 @@ export const add = functions.https.onCall(async (data, context) => {
 
   if (offer.ratingId != null) {
     throw new functions.https.HttpsError("failed-precondition", "Rating already added");
+  }
+
+  if (offer.expertId == null) {
+    throw new functions.https.HttpsError("failed-precondition", "Expert no longer exists");
   }
 
   const ratingData: Rating = {
@@ -52,4 +56,11 @@ export const add = functions.https.onCall(async (data, context) => {
   };
 
   await firestore.collection("offers").doc(params.offerId).update(offerData);
+
+  const expertData: Partial<ExpertUpdate> = {
+    ratingsCount: admin.firestore.FieldValue.increment(1),
+    ratingsSum: admin.firestore.FieldValue.increment(params.rating),
+  };
+
+  await firestore.collection("experts").doc(offer.expertId).update(expertData);
 });
