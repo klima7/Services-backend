@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import {Offer} from "models";
+import {Offer} from "../models";
 
 const firestore = admin.firestore();
 

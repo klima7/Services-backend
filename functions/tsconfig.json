@@ -7,7 +7,6 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2017",
-    "baseUrl": "src",
   },
   "compileOnSave": true,
   "include": [

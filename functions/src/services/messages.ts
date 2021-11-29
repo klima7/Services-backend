@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import {getDownloadUrl} from "utils";
+import {getDownloadUrl} from "../utils/utils";
 
 const firestore = admin.firestore();
 const bucket = admin.storage().bucket();
