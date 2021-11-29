@@ -99,6 +99,7 @@ export interface Category {
 }
 
 export interface Service {
+  id: string,
   categoryId: string,
   name: string,
 }
