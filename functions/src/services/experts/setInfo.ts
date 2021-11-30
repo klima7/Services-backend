@@ -55,5 +55,5 @@ export const setInfo = functions.https.onCall(async (data, context) => {
     },
   };
 
-  await firestore.collection("clients").doc(uid).update(expertData);
+  await firestore.collection("experts").doc(uid).update(expertData);
 });
