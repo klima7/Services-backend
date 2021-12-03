@@ -99,7 +99,12 @@ export interface Category {
 }
 
 export interface Service {
-  id: string,
-  categoryId: string,
-  name: string,
+  id: string;
+  categoryId: string;
+  name: string;
+}
+
+export interface Match {
+  new: Array<string>;
+  rejected: Array<string>;
 }
