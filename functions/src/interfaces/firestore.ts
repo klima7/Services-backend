@@ -59,21 +59,26 @@ export interface Rating {
   serviceName: string;
 }
 
-export interface Offer {
-  archived: boolean;
-  clientId: string | null;
-  clientName: string;
-  clientReadTime: Timestamp;
-  creationTime: Timestamp;
-  expertId: string | null;
-  expertName: string;
-  expertReadTime: Timestamp;
-  isPreferred: boolean;
+export interface Offer extends OfferUpdate {
+  creationTime: admin.firestore.Timestamp;
+  clientReadTime: admin.firestore.Timestamp;
+  expertReadTime: admin.firestore.Timestamp;
+}
+
+export interface OfferUpdate {
   jobId: string;
   ratingId: string | null;
+  creationTime: admin.firestore.Timestamp | admin.firestore.FieldValue;
+  status: number;
+  archived: boolean;
   serviceId: string;
   serviceName: string;
-  status: number;
+  clientId: string | null;
+  clientName: string;
+  clientReadTime: admin.firestore.Timestamp | admin.firestore.FieldValue;
+  expertId: string | null;
+  expertName: string;
+  expertReadTime: admin.firestore.Timestamp | admin.firestore.FieldValue;
 }
 
 export interface Job extends JobUpdate {
