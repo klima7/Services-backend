@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as Joi from "joi";
-import {Match, Job} from "../../interfaces/firestore";
+import {Match} from "../../interfaces/firestore";
 
 
 const firestore = admin.firestore();
