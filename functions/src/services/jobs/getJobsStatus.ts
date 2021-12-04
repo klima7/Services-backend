@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as Joi from "joi";
-import {Match} from "../../interfaces/firestore";
+import {Match, Job} from "../../interfaces/firestore";
 
 
 const firestore = admin.firestore();
@@ -32,18 +32,26 @@ export const getJobStatus = functions.https.onCall(async (data, context) => {
 
   const jobId = params.jobId;
 
-  const match: Match = (await firestore.collection("matches").doc(jobId).get()).data() as Match;
+  // Get offers
+  const offers = (await firestore.collection("offers")
+      .where("jobId", "==", jobId)
+      .select()
+      .get())
+      .docs.map((it)=>it.id);
+  if (offers.length > 0) {
+    return 2; // Accepted
+  }
 
+  // Get match
+  const match: Match = (await firestore.collection("matches").doc(jobId).get()).data() as Match;
   if (match == null) {
     throw new functions.https.HttpsError("not-found", "Job not found");
   }
 
   if (match.new.includes(uid)) {
-    return 0;
+    return 0; // New
   } else if (match.rejected.includes(uid)) {
-    return 1;
-  } else if (match.accepted.includes(uid)) {
-    return 2;
+    return 1; // Rejected
   } else {
     throw new functions.https.HttpsError("permission-denied", "No permission for this job");
   }
