@@ -76,11 +76,17 @@ export interface Offer {
   status: number;
 }
 
-export interface Job {
+export interface Job extends JobUpdate {
+  finishDate: admin.firestore.Timestamp;
+  creation: admin.firestore.Timestamp;
+}
+
+export interface JobUpdate {
   active: boolean;
+  finishDate: admin.firestore.Timestamp | admin.firestore.FieldValue;
   clientId: string | null;
   clientName: string;
-  creation: Timestamp;
+  creation: admin.firestore.Timestamp | admin.firestore.FieldValue;
   description: string;
   location: JobLocation;
   realizationTime: string;
