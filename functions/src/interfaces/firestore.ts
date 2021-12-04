@@ -104,7 +104,14 @@ export interface Service {
   name: string;
 }
 
-export interface Match {
+export interface Match extends MatchUpdate {
   new: Array<string>;
   rejected: Array<string>;
+  accepted: Array<string>;
+}
+
+export interface MatchUpdate {
+  new: Array<string> | admin.firestore.FieldValue;
+  rejected: Array<string> | admin.firestore.FieldValue;
+  accepted: Array<string> | admin.firestore.FieldValue;
 }
