@@ -15,7 +15,6 @@ export const onCreateCreateMatch = functions.firestore.document("jobs/{jobId}").
   const newMatch: Match = {
     new: matchingExperts,
     rejected: [],
-    accepted: [],
   };
 
   await firestore.collection("matches").doc(snapshot.id).set(newMatch);

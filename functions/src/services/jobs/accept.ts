@@ -61,7 +61,6 @@ export const accept = functions.https.onCall(async (data, context) => {
   const matchUpdate: Partial<MatchUpdate> = {
     new: admin.firestore.FieldValue.arrayRemove(uid),
     rejected: admin.firestore.FieldValue.arrayRemove(uid),
-    accepted: admin.firestore.FieldValue.arrayUnion(uid),
   };
 
   await firestore.collection("matches").doc(jobId).update(matchUpdate);
