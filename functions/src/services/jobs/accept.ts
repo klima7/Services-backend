@@ -2,6 +2,8 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as Joi from "joi";
 import {Job, Match, MatchUpdate, OfferUpdate, Expert} from "../../interfaces/firestore";
+import { MAX_EXPERTS_PER_JOB } from "../../lib/constants";
+import { finishJob } from "../../lib/finishJob";
 
 
 const firestore = admin.firestore();
@@ -65,7 +67,7 @@ export const accept = functions.https.onCall(async (data, context) => {
 
   await firestore.collection("matches").doc(jobId).update(matchUpdate);
 
-  // Create job
+  // Create offer
   const offer: OfferUpdate = {
     jobId: jobId,
     ratingId: null,
@@ -84,5 +86,21 @@ export const accept = functions.https.onCall(async (data, context) => {
 
   await firestore.collection("offers").add(offer);
 
+  // Check if job is full
+  if (await isJobFull(jobId)) {
+    finishJob(jobId);
+  }
+
   console.log("Job accepted: " + jobId);
 });
+
+
+async function isJobFull(jobId: string): Promise<boolean> {
+  const offersIds = (await firestore.collection("offers")
+      .where("jobId", "==", jobId)
+      .select()
+      .get())
+      .docs.map((it)=>it.id);
+
+  return offersIds.length >= MAX_EXPERTS_PER_JOB;
+}
