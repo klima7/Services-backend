@@ -1,0 +1,1 @@
+export const MAX_WORKING_AREA_RADIUS = 50;

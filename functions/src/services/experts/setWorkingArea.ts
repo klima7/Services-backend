@@ -4,6 +4,7 @@ import * as geofirestore from "geofirestore";
 import * as Joi from "joi";
 import {geocodingRepository} from "../../utils/geocoding";
 import {ExpertUpdate} from "../../interfaces/firestore";
+import {MAX_WORKING_AREA_RADIUS} from "../../lib/constants";
 
 const firestore = admin.firestore();
 const GeoFirestore = geofirestore.initializeApp(firestore);
@@ -16,7 +17,7 @@ interface SetWorkingAreaParams {
 
 const schemaSetWorkingAreaParams = Joi.object({
   placeId: Joi.string().required().min(1).max(100),
-  radius: Joi.number().required().min(0).max(50),
+  radius: Joi.number().required().min(0).max(MAX_WORKING_AREA_RADIUS),
 });
 
 
