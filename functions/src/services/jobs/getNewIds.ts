@@ -15,5 +15,5 @@ export const getNewIds = functions.https.onCall(async (_data, context) => {
       .where("new", "array-contains", uid).select()
       .get()).docs.map((it)=>it.id);
 
-  return newIds;
+  return newIds.reverse();
 });

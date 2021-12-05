@@ -15,5 +15,5 @@ export const getRejectedIds = functions.https.onCall(async (_data, context) => {
       .where("rejected", "array-contains", uid).select()
       .get()).docs.map((it)=>it.id);
 
-  return newIds;
+  return newIds.reverse();
 });
