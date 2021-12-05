@@ -61,8 +61,8 @@ export interface Rating {
 
 export interface Offer extends OfferUpdate {
   creationTime: admin.firestore.Timestamp;
-  clientReadTime: admin.firestore.Timestamp;
-  expertReadTime: admin.firestore.Timestamp;
+  clientReadTime: admin.firestore.Timestamp | null;
+  expertReadTime: admin.firestore.Timestamp | null;
 }
 
 export interface OfferUpdate {
@@ -74,11 +74,12 @@ export interface OfferUpdate {
   serviceId: string;
   serviceName: string;
   clientId: string | null;
-  clientName: string;
-  clientReadTime: admin.firestore.Timestamp | admin.firestore.FieldValue;
   expertId: string | null;
+  clientName: string;
   expertName: string;
-  expertReadTime: admin.firestore.Timestamp | admin.firestore.FieldValue;
+  clientReadTime: admin.firestore.Timestamp | admin.firestore.FieldValue | null;
+  expertReadTime: admin.firestore.Timestamp | admin.firestore.FieldValue | null;
+  lastMessage: Message | null;
 }
 
 export interface Job extends JobUpdate {
@@ -125,4 +126,16 @@ export interface MatchUpdate {
   new: Array<string> | admin.firestore.FieldValue;
   rejected: Array<string> | admin.firestore.FieldValue;
   creationDate: admin.firestore.Timestamp | admin.firestore.FieldValue;
+}
+
+export interface Message extends MessageUpdate {
+  time: admin.firestore.Timestamp;
+}
+
+export interface MessageUpdate {
+  author: string;
+  type: number;
+  time: admin.firestore.Timestamp | admin.firestore.FieldValue;
+  message?: string;
+  imageUrl?: string;
 }

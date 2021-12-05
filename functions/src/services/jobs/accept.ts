@@ -2,8 +2,8 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as Joi from "joi";
 import {Job, Match, MatchUpdate, OfferUpdate, Expert} from "../../interfaces/firestore";
-import { MAX_EXPERTS_PER_JOB } from "../../lib/constants";
-import { finishJob } from "../../lib/finishJob";
+import {MAX_EXPERTS_PER_JOB} from "../../lib/constants";
+import {finishJob} from "../../lib/finishJob";
 
 
 const firestore = admin.firestore();
@@ -82,6 +82,7 @@ export const accept = functions.https.onCall(async (data, context) => {
     expertId: uid,
     expertName: expert.info.name ?? "Unknown",
     expertReadTime: admin.firestore.FieldValue.serverTimestamp(),
+    lastMessage: null,
   };
 
   await firestore.collection("offers").add(offer);

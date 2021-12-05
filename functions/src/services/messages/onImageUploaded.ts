@@ -43,7 +43,7 @@ export const onImageUploaded = functions.storage.object().onFinalize(async (obje
     return;
   }
 
-  // Write to firestore
+  // Create message
   const data = {
     author: uid,
     imageUrl: await getDownloadUrl(bucket.file(filePath)),
