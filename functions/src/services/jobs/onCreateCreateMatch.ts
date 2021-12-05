@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import {Job, Match} from "../../interfaces/firestore";
+import {Job, MatchUpdate} from "../../interfaces/firestore";
 import {getMatchingExperts} from "../../lib/getMatchingExperts";
 
 
@@ -12,9 +12,10 @@ export const onCreateCreateMatch = functions.firestore.document("jobs/{jobId}").
 
   const matchingExperts = await getMatchingExperts(job);
 
-  const newMatch: Match = {
+  const newMatch: MatchUpdate = {
     new: matchingExperts,
     rejected: [],
+    creationDate: job.creation,
   };
 
   await firestore.collection("matches").doc(snapshot.id).set(newMatch);

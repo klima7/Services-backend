@@ -12,7 +12,9 @@ export const getRejectedIds = functions.https.onCall(async (_data, context) => {
   }
 
   const newIds = (await firestore.collection("matches")
-      .where("rejected", "array-contains", uid).select()
+      .where("rejected", "array-contains", uid)
+      .orderBy("creationDate")
+      .select()
       .get()).docs.map((it)=>it.id);
 
   return newIds.reverse();

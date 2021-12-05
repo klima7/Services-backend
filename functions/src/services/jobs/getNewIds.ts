@@ -12,7 +12,9 @@ export const getNewIds = functions.https.onCall(async (_data, context) => {
   }
 
   const newIds = (await firestore.collection("matches")
-      .where("new", "array-contains", uid).select()
+      .where("new", "array-contains", uid)
+      .orderBy("creationDate")
+      .select()
       .get()).docs.map((it)=>it.id);
 
   return newIds.reverse();

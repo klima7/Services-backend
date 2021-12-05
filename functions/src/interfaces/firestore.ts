@@ -118,9 +118,11 @@ export interface Service {
 export interface Match extends MatchUpdate {
   new: Array<string>;
   rejected: Array<string>;
+  creationDate: admin.firestore.Timestamp;
 }
 
 export interface MatchUpdate {
   new: Array<string> | admin.firestore.FieldValue;
   rejected: Array<string> | admin.firestore.FieldValue;
+  creationDate: admin.firestore.Timestamp | admin.firestore.FieldValue;
 }
