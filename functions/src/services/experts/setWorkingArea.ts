@@ -1,10 +1,12 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
+import * as geofirestore from "geofirestore";
 import * as Joi from "joi";
 import {geocodingRepository} from "../../utils/geocoding";
 import {ExpertUpdate} from "../../interfaces/firestore";
 
 const firestore = admin.firestore();
+const GeoFirestore = geofirestore.initializeApp(firestore);
 
 
 interface SetWorkingAreaParams {
@@ -42,6 +44,7 @@ export const setWorkingArea = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError("invalid-argument", "Provided location is not in Poland");
   }
 
+  // Update standard information
   const expertData: Partial<ExpertUpdate> = {
     workingArea: {
       coordinates: new admin.firestore.GeoPoint(geocodingResult.latitude, geocodingResult.longitude),
@@ -51,5 +54,6 @@ export const setWorkingArea = functions.https.onCall(async (data, context) => {
     },
   };
 
-  await firestore.collection("experts").doc(uid).update(expertData);
+  const expertsCollection = GeoFirestore.collection("experts", "workingArea.coordinates");
+  await expertsCollection.doc(uid).update(expertData, "workingArea.coordinates");
 });
