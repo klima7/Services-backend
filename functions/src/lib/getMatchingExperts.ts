@@ -1,6 +1,7 @@
 import * as admin from "firebase-admin";
 import * as geofirestore from "geofirestore";
 import {Job} from "../interfaces/firestore";
+import {MAX_WORKING_AREA_RADIUS} from "./constants";
 
 
 const firestore = admin.firestore();
@@ -10,12 +11,18 @@ const GeoFirestore = geofirestore.initializeApp(firestore);
 export async function getMatchingExperts(job: Job): Promise<Array<string>> {
   const geocollection = GeoFirestore.collection("experts", "workingArea.coordinates");
 
-  const query = geocollection
-      .near({center: job.location.coordinates, radius: 10000})
-      .where("workingArea.radius", "==", 12)
-      .where("services", "array-contains", job.serviceId)
-      .where("ready", "==", true);
+  let allMatchingExpertsIds: Array<string> = [];
 
-  const expertsIds = (await query.get()).docs.map((it)=>it.id);
-  return expertsIds;
+  for (let radius = 1; radius <= MAX_WORKING_AREA_RADIUS; radius++) {
+    const query = geocollection
+        .near({center: job.location.coordinates, radius: radius})
+        .where("workingArea.radius", "==", radius)
+        .where("services", "array-contains", job.serviceId)
+        .where("ready", "==", true);
+
+    const partMatchingExpertsIds = (await query.get()).docs.map((it)=>it.id);
+    allMatchingExpertsIds = allMatchingExpertsIds.concat(partMatchingExpertsIds);
+  }
+
+  return allMatchingExpertsIds;
 }
