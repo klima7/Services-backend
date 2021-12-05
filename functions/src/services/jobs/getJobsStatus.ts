@@ -35,6 +35,7 @@ export const getJobStatus = functions.https.onCall(async (data, context) => {
   // Get offers
   const offers = (await firestore.collection("offers")
       .where("jobId", "==", jobId)
+      .where("expertId", "==", uid)
       .select()
       .get())
       .docs.map((it)=>it.id);
