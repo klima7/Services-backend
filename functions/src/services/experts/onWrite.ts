@@ -8,7 +8,7 @@ export const onWrite = functions.firestore.document("experts/{expertId}").onWrit
     return;
   }
 
-  const newRating = expert.ratingsSum / expert.ratingsCount;
+  const newRating = expert.ratingsCount != 0 ? expert.ratingsSum / expert.ratingsCount : 0;
   const ready = isReady(expert);
 
   const expertData: Partial<Expert> = {
