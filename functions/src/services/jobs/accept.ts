@@ -78,10 +78,10 @@ export const accept = functions.https.onCall(async (data, context) => {
     serviceName: job.serviceName,
     clientId: job.clientId,
     clientName: job.clientName,
-    clientReadTime: admin.firestore.FieldValue.serverTimestamp(),
+    clientReadTime: null,
     expertId: uid,
     expertName: expert.info.name ?? "Unknown",
-    expertReadTime: admin.firestore.FieldValue.serverTimestamp(),
+    expertReadTime: null,
     lastMessage: null,
   };
 
