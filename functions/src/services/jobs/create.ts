@@ -69,6 +69,7 @@ export const create = functions.https.onCall(async (data, context) => {
     realizationTime: params.realizationTime,
     serviceId: params.serviceId,
     serviceName: service.name,
+    unreadOffers: [],
   };
 
   await firestore.collection("jobs").add(newJob);

@@ -85,6 +85,7 @@ export interface OfferUpdate {
 export interface Job extends JobUpdate {
   finishDate: admin.firestore.Timestamp;
   creation: admin.firestore.Timestamp;
+  unreadOffers: Array<string>;
 }
 
 export interface JobUpdate {
@@ -98,6 +99,7 @@ export interface JobUpdate {
   realizationTime: string;
   serviceId: string;
   serviceName: string;
+  unreadOffers: Array<string> | admin.firestore.FieldValue;
 }
 
 export interface JobLocation {
