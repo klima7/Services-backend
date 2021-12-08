@@ -151,3 +151,9 @@ export interface TokenUpdate {
   time: admin.firestore.Timestamp | admin.firestore.FieldValue;
   uid: string;
 }
+
+
+export interface Notification {
+  type: string;
+  [key: string]: string;
+}
