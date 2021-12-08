@@ -149,11 +149,5 @@ export interface Token extends TokenUpdate {
 export interface TokenUpdate {
   token: string;
   time: admin.firestore.Timestamp | admin.firestore.FieldValue;
-  uid: string;
 }
 
-
-export interface Notification {
-  type: string;
-  [key: string]: string;
-}

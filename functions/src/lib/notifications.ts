@@ -1,5 +1,8 @@
 import * as admin from "firebase-admin";
-import {Client, Expert, Message, Notification, Offer, Token} from "../interfaces/firestore";
+import {Role} from "../interfaces/domain";
+import {Client, Expert, Message, Offer} from "../interfaces/firestore";
+import {Notification} from "../interfaces/messaging";
+import {getTokensForUser} from "./tokens";
 
 const firestore = admin.firestore();
 const messaging = admin.messaging();
@@ -11,8 +14,7 @@ export async function sendNotificationFromMessage(offerId: string, message: Mess
     throw Error("Offer not found");
   }
 
-  const [_senderUid, receiverUid] = getSenderAndReceiverUids(offer, message);
-  console.log(_senderUid);
+  const [receiverUid, receiverRole] = getReceiver(offer, message);
   const senderName = await getSenderName(offer, message);
 
   if (receiverUid == null) {
@@ -20,9 +22,9 @@ export async function sendNotificationFromMessage(offerId: string, message: Mess
   }
 
   if (message.type == 0) {
-    await sendTextMessageNotification(receiverUid, senderName, offer, message);
+    await sendTextMessageNotification(receiverUid, receiverRole, senderName, offer, message);
   } else if (message.type == 1) {
-    await sendImageMessageNotification(receiverUid, senderName, offer, message);
+    await sendImageMessageNotification(receiverUid, receiverRole, senderName, offer, message);
   } else if (message.type == 2) {
     console.log("Status change message");
   } else if (message.type == 3) {
@@ -31,11 +33,11 @@ export async function sendNotificationFromMessage(offerId: string, message: Mess
 }
 
 
-function getSenderAndReceiverUids(offer: Offer, message: Message): Array<string | null> {
+function getReceiver(offer: Offer, message: Message): [string|null, Role] {
   if (message.author == "expert") {
-    return [offer.expertId, offer.clientId];
+    return [offer.clientId, "client"];
   } else {
-    return [offer.clientId, offer.expertId];
+    return [offer.expertId, "expert"];
   }
 }
 
@@ -57,7 +59,7 @@ async function getSenderName(offer: Offer, message: Message): Promise<string> {
 }
 
 
-async function sendTextMessageNotification(receiverUid: string, senderName: string,
+async function sendTextMessageNotification(receiverUid: string, receiverRole: Role, senderName: string,
     _offer: Offer, message: Message): Promise<void> {
   console.log("Sending text notification");
   const notification: Notification = {
@@ -65,29 +67,29 @@ async function sendTextMessageNotification(receiverUid: string, senderName: stri
     sender: senderName,
     message: message.message ?? "",
   };
-  await sendNotificationToUser(receiverUid, notification);
+  await sendNotificationToUser(receiverUid, receiverRole, notification);
 }
 
 
-async function sendImageMessageNotification(receiverUid: string, senderName: string,
+async function sendImageMessageNotification(receiverUid: string, receiverRole: Role, senderName: string,
     _offer: Offer, _message: Message): Promise<void> {
   console.log("Sending image notification");
   const notification: Notification = {
     type: "image-message",
     sender: senderName,
   };
-  await sendNotificationToUser(receiverUid, notification);
+  await sendNotificationToUser(receiverUid, receiverRole, notification);
 }
 
 
-async function sendNotificationToUser(uid: string, notification: Notification) {
+async function sendNotificationToUser(uid: string, role: Role, notification: Notification) {
   const payload: admin.messaging.MessagingPayload = {
     data: notification as admin.messaging.MessagingPayload["data"],
   };
 
-  const tokens: Array<string> = (await firestore.collection("tokens")
-      .where("uid", "==", uid).get())
-      .docs.map((it)=>(it.data() as Token).token);
+  const tokens = await getTokensForUser(uid, role);
+  console.log("TOKENS: " + tokens);
+  console.log("TOKEN LENGTH: " + tokens.length);
 
   tokens.forEach(async (token) => {
     console.log("SENDING NOTIFICATION TO " + token);
