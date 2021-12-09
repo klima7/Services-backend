@@ -84,14 +84,14 @@ async function sendImageMessageNotification(receiverUid: string, receiverRole: R
 }
 
 
-// async function sendReadNotification(receiverUid: string, receiverRole: Role, offerId: string): Promise<void> {
-//   console.log("Sending test notification");
-//   const notification: Notification = {
-//     type: "offer-read",
-//     offerId: offerId,
-//   };
-//   await sendNotificationToUser(receiverUid, receiverRole, notification);
-// }
+export async function sendReadNotification(receiverUid: string, receiverRole: Role, offerId: string): Promise<void> {
+  console.log("Sending read notification");
+  const notification: Notification = {
+    type: "offer-read",
+    offerId: offerId,
+  };
+  await sendNotificationToUser(receiverUid, receiverRole, notification);
+}
 
 
 async function sendNotificationToUser(uid: string, role: Role, notification: Notification) {
@@ -100,12 +100,7 @@ async function sendNotificationToUser(uid: string, role: Role, notification: Not
   };
 
   const tokens = await getTokensForUser(uid, role);
-  console.log("TOKENS: " + tokens);
-  console.log("TOKEN LENGTH: " + tokens.length);
-
   tokens.forEach(async (token) => {
-    console.log("SENDING NOTIFICATION TO " + token);
-    console.log("SENDING DATA" + notification);
     await messaging.sendToDevice(token, payload);
   });
 }
