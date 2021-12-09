@@ -101,6 +101,10 @@ async function sendNotificationToUser(uid: string, role: Role, notification: Not
 
   const tokens = await getTokensForUser(uid, role);
   tokens.forEach(async (token) => {
-    await messaging.sendToDevice(token, payload);
+    try {
+      await messaging.sendToDevice(token, payload);
+    } catch (e) {
+      console.log("Send notification failure");
+    }
   });
 }

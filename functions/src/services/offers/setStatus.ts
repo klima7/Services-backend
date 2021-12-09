@@ -1,7 +1,8 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as Joi from "joi";
-import {Offer} from "../../interfaces/firestore";
+import {MessageUpdate, Offer} from "../../interfaces/firestore";
+import {getRole} from "../../lib/utils";
 
 const firestore = admin.firestore();
 
@@ -36,9 +37,24 @@ export const setStatus = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError("invalid-argument", "Requested offer does not belong to requesting user");
   }
 
+  // Update status
   const offerData: Partial<Offer> = {
     status: params.status,
   };
-
   await firestore.collection("offers").doc(params.offerId).update(offerData);
+
+  const author = getRole(uid, offer);
+  if (author == null) {
+    throw Error("User not if offer. Should never happen");
+  }
+
+  // Add message
+  const messageData: MessageUpdate = {
+    author: author,
+    newStatus: params.status,
+    time: admin.firestore.FieldValue.serverTimestamp(),
+    type: 2,
+  };
+
+  await firestore.collection("offers").doc(params.offerId).collection("messages").add(messageData);
 });

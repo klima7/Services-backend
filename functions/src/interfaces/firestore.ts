@@ -140,6 +140,7 @@ export interface MessageUpdate {
   time: admin.firestore.Timestamp | admin.firestore.FieldValue;
   message?: string;
   imageUrl?: string;
+  newStatus?: number;
 }
 
 export interface Token extends TokenUpdate {
