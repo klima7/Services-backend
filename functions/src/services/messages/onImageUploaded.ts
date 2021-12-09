@@ -36,8 +36,13 @@ export const onImageUploaded = functions.storage.object().onFinalize(async (obje
     return;
   }
 
-  // Check if user is member of offer
-  if (uid != offer.clientId && uid != offer.expertId) {
+  let author;
+
+  if (uid == offer.clientId) {
+    author = "client";
+  } else if (uid == offer.expertId) {
+    author = "expert";
+  } else {
     await bucket.file(filePath).delete();
     console.log("User is not member of given offer");
     return;
@@ -45,7 +50,7 @@ export const onImageUploaded = functions.storage.object().onFinalize(async (obje
 
   // Create message
   const data = {
-    author: uid,
+    author: author,
     imageUrl: await getDownloadUrl(bucket.file(filePath)),
     time: admin.firestore.FieldValue.serverTimestamp(),
     type: 1,

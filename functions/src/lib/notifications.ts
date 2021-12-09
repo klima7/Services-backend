@@ -22,9 +22,11 @@ export async function sendNotificationFromMessage(offerId: string, message: Mess
   }
 
   if (message.type == 0) {
-    await sendTextMessageNotification(receiverUid, receiverRole, senderName, offer, message);
+    await sendTestNotification(receiverUid, receiverRole);
+    await sendTextMessageNotification(receiverUid, receiverRole, senderName, offerId, offer, message);
   } else if (message.type == 1) {
-    await sendImageMessageNotification(receiverUid, receiverRole, senderName, offer, message);
+    await sendTestNotification(receiverUid, receiverRole);
+    await sendImageMessageNotification(receiverUid, receiverRole, senderName, offerId, offer, message);
   } else if (message.type == 2) {
     console.log("Status change message");
   } else if (message.type == 3) {
@@ -59,24 +61,35 @@ async function getSenderName(offer: Offer, message: Message): Promise<string> {
 }
 
 
+async function sendTestNotification(receiverUid: string, receiverRole: Role): Promise<void> {
+  console.log("Sending test notification");
+  const notification: Notification = {
+    type: "test",
+  };
+  await sendNotificationToUser(receiverUid, receiverRole, notification);
+}
+
+
 async function sendTextMessageNotification(receiverUid: string, receiverRole: Role, senderName: string,
-    _offer: Offer, message: Message): Promise<void> {
+    offerId: string, _offer: Offer, message: Message): Promise<void> {
   console.log("Sending text notification");
   const notification: Notification = {
     type: "text-message",
     sender: senderName,
     message: message.message ?? "",
+    offerId: offerId,
   };
   await sendNotificationToUser(receiverUid, receiverRole, notification);
 }
 
 
 async function sendImageMessageNotification(receiverUid: string, receiverRole: Role, senderName: string,
-    _offer: Offer, _message: Message): Promise<void> {
+    offerId: string, _offer: Offer, _message: Message): Promise<void> {
   console.log("Sending image notification");
   const notification: Notification = {
     type: "image-message",
     sender: senderName,
+    offerId: offerId,
   };
   await sendNotificationToUser(receiverUid, receiverRole, notification);
 }
