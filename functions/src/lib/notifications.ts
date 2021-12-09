@@ -26,9 +26,9 @@ export async function sendNotificationFromMessage(offerId: string, message: Mess
   } else if (message.type == 1) {
     await sendImageMessageNotification(receiverUid, receiverRole, senderName, offerId, offer, message);
   } else if (message.type == 2) {
-    console.log("Status change message");
+    sendOfferStatusChangeNotification(receiverUid, receiverRole, senderName, offerId, offer, message);
   } else if (message.type == 3) {
-    console.log("Comment added message");
+    sendRatingAddedNotification(receiverUid, receiverRole, senderName, offerId, offer, message);
   }
 }
 
@@ -79,6 +79,33 @@ async function sendImageMessageNotification(receiverUid: string, receiverRole: R
     type: "image-message",
     sender: senderName,
     offerId: offerId,
+  };
+  await sendNotificationToUser(receiverUid, receiverRole, notification);
+}
+
+
+async function sendOfferStatusChangeNotification(receiverUid: string, receiverRole: Role, senderName: string,
+    offerId: string, _offer: Offer, message: Message): Promise<void> {
+  console.log("Sending status change notification");
+  const notification: Notification = {
+    type: "status-change",
+    sender: senderName,
+    offerId: offerId,
+    newStatus: message.newStatus?.toString() ?? "0",
+  };
+  await sendNotificationToUser(receiverUid, receiverRole, notification);
+}
+
+
+async function sendRatingAddedNotification(receiverUid: string, receiverRole: Role, senderName: string,
+    offerId: string, _offer: Offer, message: Message): Promise<void> {
+  console.log("Sending rating added notification");
+  const notification: Notification = {
+    type: "rating-added",
+    sender: senderName,
+    offerId: offerId,
+    ratingId: message.ratingId ?? "0",
+    rating: message.rating?.toString() ?? "0.0",
   };
   await sendNotificationToUser(receiverUid, receiverRole, notification);
 }
