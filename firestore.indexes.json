@@ -1,6 +1,56 @@
 {
   "indexes": [
     {
+      "collectionGroup": "experts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "services",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "ready",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "workingArea.radius",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "g.geohash",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "jobs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "clientId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "creation",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "matches",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "new",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "creationDate",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
       "collectionGroup": "offers",
       "queryScope": "COLLECTION",
       "fields": [
@@ -14,6 +64,20 @@
         },
         {
           "fieldPath": "creationTime",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "ratings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "expertId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "date",
           "order": "DESCENDING"
         }
       ]
