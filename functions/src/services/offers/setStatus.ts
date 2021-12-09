@@ -43,12 +43,11 @@ export const setStatus = functions.https.onCall(async (data, context) => {
   };
   await firestore.collection("offers").doc(params.offerId).update(offerData);
 
+  // Add message
   const author = getRole(uid, offer);
   if (author == null) {
     throw Error("User not if offer. Should never happen");
   }
-
-  // Add message
   const messageData: MessageUpdate = {
     author: author,
     newStatus: params.status,

@@ -141,6 +141,8 @@ export interface MessageUpdate {
   message?: string;
   imageUrl?: string;
   newStatus?: number;
+  ratingId?: string;
+  rating?: number;
 }
 
 export interface Token extends TokenUpdate {
