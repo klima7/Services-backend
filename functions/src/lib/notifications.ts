@@ -22,10 +22,8 @@ export async function sendNotificationFromMessage(offerId: string, message: Mess
   }
 
   if (message.type == 0) {
-    await sendTestNotification(receiverUid, receiverRole);
     await sendTextMessageNotification(receiverUid, receiverRole, senderName, offerId, offer, message);
   } else if (message.type == 1) {
-    await sendTestNotification(receiverUid, receiverRole);
     await sendImageMessageNotification(receiverUid, receiverRole, senderName, offerId, offer, message);
   } else if (message.type == 2) {
     console.log("Status change message");
@@ -61,15 +59,6 @@ async function getSenderName(offer: Offer, message: Message): Promise<string> {
 }
 
 
-async function sendTestNotification(receiverUid: string, receiverRole: Role): Promise<void> {
-  console.log("Sending test notification");
-  const notification: Notification = {
-    type: "test",
-  };
-  await sendNotificationToUser(receiverUid, receiverRole, notification);
-}
-
-
 async function sendTextMessageNotification(receiverUid: string, receiverRole: Role, senderName: string,
     offerId: string, _offer: Offer, message: Message): Promise<void> {
   console.log("Sending text notification");
@@ -93,6 +82,16 @@ async function sendImageMessageNotification(receiverUid: string, receiverRole: R
   };
   await sendNotificationToUser(receiverUid, receiverRole, notification);
 }
+
+
+// async function sendReadNotification(receiverUid: string, receiverRole: Role, offerId: string): Promise<void> {
+//   console.log("Sending test notification");
+//   const notification: Notification = {
+//     type: "offer-read",
+//     offerId: offerId,
+//   };
+//   await sendNotificationToUser(receiverUid, receiverRole, notification);
+// }
 
 
 async function sendNotificationToUser(uid: string, role: Role, notification: Notification) {

@@ -8,6 +8,7 @@ import * as jobs from "./services/jobs/index";
 import * as offers from "./services/offers/index";
 import * as messages from "./services/messages/index";
 import * as ratings from "./services/ratings/index";
+import * as notifications from "./services/notifications/index";
 
 exports.experts = experts;
 exports.clients = clients;
@@ -15,3 +16,4 @@ exports.jobs = jobs;
 exports.offers = offers;
 exports.messages = messages;
 exports.ratings = ratings;
+exports.notifications = notifications;

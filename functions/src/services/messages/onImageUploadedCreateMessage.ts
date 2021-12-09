@@ -6,7 +6,7 @@ const firestore = admin.firestore();
 const bucket = admin.storage().bucket();
 
 
-export const onImageUploaded = functions.storage.object().onFinalize(async (object) => {
+export const onImageUploadedCreateMessage = functions.storage.object().onFinalize(async (object) => {
   const filePath = object.name;
   if (filePath == undefined) {
     throw new functions.https.HttpsError("internal", "No file path");

@@ -1,13 +1,12 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import {Message, OfferUpdate} from "../../interfaces/firestore";
-import {sendNotificationFromMessage} from "../../lib/notifications";
 
 
 const firestore = admin.firestore();
 
 
-export const onMessageSent = functions.firestore.document("offers/{offerId}/messages/{messageId}").onCreate(async (snapshot, context) => {
+export const onMessageSentUpdateLast = functions.firestore.document("offers/{offerId}/messages/{messageId}").onCreate(async (snapshot, context) => {
   const message: Message = snapshot.data() as Message;
   const offerId: string = context.params.offerId;
 
@@ -16,8 +15,4 @@ export const onMessageSent = functions.firestore.document("offers/{offerId}/mess
   };
 
   await firestore.collection("offers").doc(offerId).update(offerUpdate);
-
-  await sendNotificationFromMessage(offerId, message);
 });
-
-
