@@ -54,7 +54,6 @@ export interface Rating {
   comment: string | null;
   date: Timestamp;
   expertId: string;
-  offerId: string;
   rating: number;
   serviceName: string;
 }

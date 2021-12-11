@@ -49,7 +49,6 @@ export const add = functions.https.onCall(async (data, context) => {
     comment: params.comment,
     date: admin.firestore.FieldValue.serverTimestamp(),
     expertId: offer.expertId,
-    offerId: params.offerId,
     rating: params.rating,
     serviceName: offer.serviceName,
   };
