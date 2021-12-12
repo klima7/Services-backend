@@ -1,15 +1,17 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import {OfferUpdate} from "../../interfaces/firestore";
+import {Expert, OfferUpdate} from "../../interfaces/firestore";
 
 
 const firestore = admin.firestore();
+const bucket = admin.storage().bucket();
 
 
 export const onDelete = functions.firestore.document("experts/{expertId}").onDelete(async (snapshot, context) => {
-  // const expert = snapshot.data() as Expert;
+  const expert = snapshot.data() as Expert;
   const expertId = context.params.expertId;
 
+  await deleteProfileImage(expertId, expert);
   await deleteRatings(expertId);
   await deleteTokens(expertId);
   await nullifyOffers(expertId);
@@ -44,4 +46,15 @@ async function nullifyOffers(expertId: string) {
   offers.docs.forEach(async (offerDoc) => {
     await offerDoc.ref.update(offerUpdate);
   });
+}
+
+
+async function deleteProfileImage(expertId: string, expert: Expert) {
+  const profileImage = expert.profileImage;
+  if (profileImage == null) {
+    return;
+  }
+
+  const path = `profile_images/${expertId}.png`;
+  await bucket.file(path).delete();
 }

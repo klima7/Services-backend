@@ -22,5 +22,9 @@ export const onProfileImageDeleted = functions.storage.object().onDelete(async (
     profileImage: null,
   };
 
-  await firestore.collection("experts").doc(uid).update(data);
+  try {
+    await firestore.collection("experts").doc(uid).update(data);
+  } catch (e) {
+    console.log("Expert not found");
+  }
 });
