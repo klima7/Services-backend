@@ -8,7 +8,6 @@ export const onOfferReadSendNotification = functions.firestore.document("offers/
   const before = snapshot.before.data() as Offer;
   const after = snapshot.after.data() as Offer;
 
-  console.log(`BEFORE: ${before.clientReadTime?.toMillis()} AFTER: ${after.clientReadTime?.toMillis()} UPDATED: ${before.clientReadTime?.toMillis() !== after.clientReadTime?.toMillis()}`);
   if (before.clientReadTime?.toMillis() !== after.clientReadTime?.toMillis() && after?.clientId !== null) {
     sendReadNotification(after.clientId, "client", offerId);
   } else if (before.expertReadTime?.toMillis() !== after.expertReadTime?.toMillis() && after?.expertId !== null) {

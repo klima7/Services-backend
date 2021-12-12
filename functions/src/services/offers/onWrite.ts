@@ -12,6 +12,12 @@ export const onWriteUpdateJob = functions.firestore.document("offers/{offerId}")
   const after = snapshot.after.data() as Offer | undefined;
   const jobId = after?.jobId ?? before?.jobId;
 
+  // Delete job is there is neither a customer not an expert
+  if (after!=null && after.clientId==null && after.expertId==null) {
+    await snapshot.after.ref.delete();
+    return;
+  }
+
   if (jobId == null) {
     throw Error("Unknown job id");
   }
