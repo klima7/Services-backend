@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import {OfferUpdate} from "../../interfaces/firestore";
-import { finishJob } from "../../lib/finishJob";
+import {finishJob} from "../../lib/finishJob";
 
 
 const firestore = admin.firestore();
@@ -12,6 +12,7 @@ export const onDelete = functions.firestore.document("clients/{clientId}").onDel
 
   await deleteTokens(clientId);
   await finishJobs(clientId);
+  await nullifyJobs(clientId);
   await nullifyOffers(clientId);
 });
 
@@ -19,6 +20,22 @@ export const onDelete = functions.firestore.document("clients/{clientId}").onDel
 async function deleteTokens(clientId: string) {
   const ratings = await firestore.collection("clients").doc(clientId).collection("tokens").get();
   ratings.docs.map(async (doc) => await doc.ref.delete());
+}
+
+
+async function nullifyJobs(clientId: string) {
+  const jobs = await firestore
+      .collection("jobs")
+      .where("clientId", "==", clientId)
+      .get();
+
+  const offerUpdate: Partial<OfferUpdate> = {
+    clientId: null,
+  };
+
+  jobs.docs.forEach(async (offerDoc) => {
+    await offerDoc.ref.update(offerUpdate);
+  });
 }
 
 
