@@ -8,4 +8,5 @@ export * from "./finish";
 export * from "./finishEndedAtMidnight";
 export * from "./finishEndedOnRequest";
 export * from "./onCreateCreateMatch";
+export * from "./onDeleteDeleteMatch";
 export * from "./onUpdateDelete";

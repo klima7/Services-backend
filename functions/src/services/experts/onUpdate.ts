@@ -2,11 +2,8 @@ import * as functions from "firebase-functions";
 import {Expert} from "../../interfaces/firestore";
 
 
-export const onWrite = functions.firestore.document("experts/{expertId}").onWrite(async (snapshot) => {
+export const onWrite = functions.firestore.document("experts/{expertId}").onUpdate(async (snapshot) => {
   const expert: Expert = snapshot.after.data() as Expert;
-  if (expert == null) {
-    return;
-  }
 
   const newRating = expert.ratingsCount != 0 ? expert.ratingsSum / expert.ratingsCount : 0;
   const ready = isReady(expert);
