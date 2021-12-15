@@ -85,7 +85,7 @@ export interface Job extends JobUpdate {
   finishDate: admin.firestore.Timestamp;
   creation: admin.firestore.Timestamp;
   unreadOffers: Array<string>;
-  offers: Array<string>;
+  expertsIds: Array<string>;
 }
 
 export interface JobUpdate {
@@ -100,7 +100,7 @@ export interface JobUpdate {
   serviceId: string;
   serviceName: string;
   unreadOffers: Array<string> | admin.firestore.FieldValue;
-  offers: Array<string> | admin.firestore.FieldValue;
+  expertsIds: Array<string> | admin.firestore.FieldValue;
 }
 
 export interface JobLocation {
