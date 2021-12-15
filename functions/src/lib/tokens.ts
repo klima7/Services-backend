@@ -41,3 +41,20 @@ export async function deleteToken(uid: string, role: Role, token: string): Promi
       .get())
       .forEach(async (doc) => await doc.ref.delete());
 }
+
+
+export async function deleteOutdatedTokens(): Promise<void> {
+  const minTime = admin.firestore.Timestamp.fromDate(getMinTime());
+  (await firestore
+      .collectionGroup("tokens")
+      .where("time", "<=", minTime)
+      .get())
+      .forEach(async (token) => await token.ref.delete());
+}
+
+
+function getMinTime(): Date {
+  const date = new Date();
+  date.setMonth(date.getMonth() - 1);
+  return date;
+}
