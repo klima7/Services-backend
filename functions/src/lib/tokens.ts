@@ -23,3 +23,21 @@ export async function getTokensForUser(uid: string, role: Role): Promise<Array<s
 
   return tokens;
 }
+
+
+export async function deleteToken(uid: string, role: Role, token: string): Promise<void> {
+  let collectionName = null;
+  if (role == "expert") {
+    collectionName = "experts";
+  } else {
+    collectionName = "clients";
+  }
+
+  (await firestore
+      .collection(collectionName)
+      .doc(uid)
+      .collection("tokens")
+      .where("token", "==", token)
+      .get())
+      .forEach(async (doc) => await doc.ref.delete());
+}

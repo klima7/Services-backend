@@ -2,7 +2,7 @@ import * as admin from "firebase-admin";
 import {Role} from "../interfaces/domain";
 import {Client, Expert, Message, Offer} from "../interfaces/firestore";
 import {Notification} from "../interfaces/messaging";
-import {getTokensForUser} from "./tokens";
+import {deleteToken, getTokensForUser} from "./tokens";
 
 const firestore = admin.firestore();
 const messaging = admin.messaging();
@@ -132,7 +132,15 @@ async function sendNotificationToUser(uid: string, role: Role, notification: Not
     try {
       await messaging.sendToDevice(token, payload);
     } catch (e) {
-      console.log("Send notification failure");
+      if (e instanceof Error) {
+        const message = e.message;
+        switch (message) {
+          case "UNREGISTERED":
+          case "INVALID_ARGUMENT":
+            deleteToken(uid, role, token);
+            break;
+        }
+      }
     }
   });
 }
