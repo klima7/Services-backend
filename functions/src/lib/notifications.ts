@@ -122,6 +122,7 @@ export async function sendReadNotification(receiverUid: string, receiverRole: Ro
 
 
 async function sendNotificationToUser(uid: string, role: Role, notification: Notification) {
+  notification.uid = uid;
   const payload: admin.messaging.MessagingPayload = {
     data: notification as admin.messaging.MessagingPayload["data"],
   };
