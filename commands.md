@@ -25,6 +25,8 @@ To have them at hand...
 
 `firebase deploy --only firestore:rules` - deploy firestore rules
 
+`firebase deploy --only storage` - deploy storage rules
+
 `firebase functions:shell` - start functions shell
 
 ### In case of occupied port
