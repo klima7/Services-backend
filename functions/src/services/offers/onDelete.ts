@@ -19,7 +19,7 @@ export const onDelete = functions.firestore.document("offers/{offerId}").onDelet
 
 async function updateJob(offerId: string, offer: Offer) {
   const jobUpdate: Partial<JobUpdate> = {
-    expertsIds: admin.firestore.FieldValue.arrayRemove(offer.expertId),
+    offers: admin.firestore.FieldValue.arrayRemove(offerId),
     unreadOffers: admin.firestore.FieldValue.arrayRemove(offerId),
   };
   firestore.collection("jobs").doc(offer.jobId).update(jobUpdate);

@@ -10,8 +10,9 @@ export const onCreateUpdateJob = functions.firestore.document("offers/{offerId}"
   const offer = snapshot.data() as Offer;
   const jobId = offer.jobId;
 
+  const offerId = context.params.offerId;
   const jobUpdate: Partial<JobUpdate> = {
-    expertsIds: admin.firestore.FieldValue.arrayUnion(offer.expertId),
+    offers: admin.firestore.FieldValue.arrayUnion(offerId),
   };
   firestore.collection("jobs").doc(jobId).update(jobUpdate);
 });
