@@ -23,6 +23,8 @@ To have them at hand...
 
 `firebase deploy --only firestore:indexes` - deploy indexes
 
+`firebase deploy --only firestore:rules` - deploy firestore rules
+
 `firebase functions:shell` - start functions shell
 
 ### In case of occupied port

@@ -1,8 +1,114 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write;
+  
+  	// categories
+    match /categories/{category} {
+      allow read: if request.auth != null;
     }
+    
+    // services
+		match /services/{serviceId} {
+      allow read: if request.auth != null;
+    }
+    
+    // ratings
+    match /ratings/{rating} {
+      allow read: if request.auth != null;
+    }
+    
+    // jobs
+    match /jobs/{job} {
+      allow read: if request.auth != null;
+    }
+    
+    // clients
+    match /clients/{clientUid} {
+      allow read: if request.auth != null;
+      
+      // tokens
+      match /tokens/{token} {
+        allow read: if request.auth != null && exists(/databases/$(database)/documents/clients/$(clientUid)) && request.auth.uid == clientUid;
+
+        allow create: if request.auth != null && exists(/databases/$(database)/documents/clients/$(clientUid)) && request.auth.uid == clientUid &&
+        request.resource.data.keys().hasAll(['time', 'token']) &&
+        request.resource.data.time is timestamp &&
+        request.resource.data.token is string &&
+        request.resource.data.time <= request.time;
+
+        allow update: if request.auth != null && exists(/databases/$(database)/documents/clients/$(clientUid)) && request.auth.uid == clientUid &&
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['time'])) &&
+        request.resource.data.time <= request.time;
+
+        allow delete: if request.auth != null && exists(/databases/$(database)/documents/clients/$(clientUid)) && request.auth.uid == clientUid;
+      }
+    }
+    
+    // experts
+    match /experts/{expertUid} {
+      allow read: if request.auth != null;
+      
+      // tokens
+      match /tokens/{token} {
+        allow read: if request.auth != null && exists(/databases/$(database)/documents/experts/$(expertUid)) && request.auth.uid == expertUid;
+
+        allow create: if request.auth != null && exists(/databases/$(database)/documents/experts/$(expertUid)) && request.auth.uid == expertUid &&
+        request.resource.data.keys().hasAll(['time', 'token']) &&
+        request.resource.data.time is timestamp &&
+        request.resource.data.token is string &&
+        request.resource.data.time <= request.time;
+
+        allow update: if request.auth != null && exists(/databases/$(database)/documents/experts/$(expertUid)) && request.auth.uid == expertUid &&
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['time'])) &&
+        request.resource.data.time <= request.time;
+
+        allow delete: if request.auth != null && exists(/databases/$(database)/documents/experts/$(expertUid)) && request.auth.uid == expertUid;
+      }
+    }
+    
+    // offers
+    match /offers/{offer} {
+    
+    	// for client
+      allow read: if request.auth != null && request.auth.uid == resource.data.clientId;
+      
+      allow update: if request.auth != null && request.auth.uid == resource.data.clientId && 
+      (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['clientReadTime']));
+      
+      // for expert
+      allow read: if request.auth != null && request.auth.uid == resource.data.expertId;
+      
+      allow update: if request.auth != null && request.auth.uid == resource.data.expertId && 
+      (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['expertReadTime']));
+      
+      // messages
+      match /messages/{message} {
+      
+        // for client
+        allow read: if request.auth != null && request.auth.uid == get(/databases/$(database)/documents/offers/$(offer)).data.clientId;
+
+        allow create: if request.auth != null && request.auth.uid == get(/databases/$(database)/documents/offers/$(offer)).data.clientId &&
+        request.resource.data.keys().hasAll(['author', 'message', 'time', 'type']) &&
+        request.resource.data.author == "client" &&
+        request.resource.data.message is string &&
+        request.resource.data.time is timestamp &&
+        request.resource.data.type == 0 &&
+        request.resource.data.time <= request.time &&
+        request.resource.data.time.toMillis() >= request.time.toMillis()-1000*60*60*24;
+
+        // for expert
+        allow read: if request.auth != null && request.auth.uid == get(/databases/$(database)/documents/offers/$(offer)).data.expertId;
+
+        allow create: if request.auth != null && request.auth.uid == get(/databases/$(database)/documents/offers/$(offer)).data.expertId &&
+        request.resource.data.keys().hasAll(['author', 'message', 'time', 'type']) &&
+        request.resource.data.author == "expert" &&
+        request.resource.data.message is string &&
+        request.resource.data.time is timestamp &&
+        request.resource.data.type == 0 &&
+        request.resource.data.time <= request.time &&
+        request.resource.data.time.toMillis() >= request.time.toMillis()-1000*60*60*24;
+      }
+    }
+    
   }
 }
