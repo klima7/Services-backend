@@ -20,7 +20,7 @@ export async function getMatchingExperts(job: Job): Promise<Array<string>> {
         .where("services", "array-contains", job.serviceId)
         .where("ready", "==", true);
 
-    const partMatchingExpertsIds = (await query.get()).docs.map((it)=>it.id);
+    const partMatchingExpertsIds = (await query.get()).docs.map((it)=>it.id).filter((it)=>it!=job.clientId);
     allMatchingExpertsIds = allMatchingExpertsIds.concat(partMatchingExpertsIds);
   }
 
