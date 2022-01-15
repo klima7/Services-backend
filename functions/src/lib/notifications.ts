@@ -59,6 +59,18 @@ async function getSenderName(offer: Offer, message: Message): Promise<string> {
 }
 
 
+export async function sendNewOfferNotification(receiverUid: string, senderName: string, offerId: string, service: string): Promise<void> {
+  console.log("Sending text notification");
+  const notification: Notification = {
+    type: "new-offer",
+    sender: senderName,
+    offerId: offerId,
+    service: service,
+  };
+  await sendNotificationToUser(receiverUid, "client", notification);
+}
+
+
 async function sendTextMessageNotification(receiverUid: string, receiverRole: Role, senderName: string,
     offerId: string, _offer: Offer, message: Message): Promise<void> {
   console.log("Sending text notification");

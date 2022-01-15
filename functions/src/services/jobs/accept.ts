@@ -4,6 +4,7 @@ import * as Joi from "joi";
 import {Job, Match, MatchUpdate, OfferUpdate, Expert} from "../../interfaces/firestore";
 import {MAX_EXPERTS_PER_JOB} from "../../lib/constants";
 import {finishJob} from "../../lib/finishJob";
+import {sendNewOfferNotification} from "../../lib/notifications";
 
 
 const firestore = admin.firestore();
@@ -85,12 +86,15 @@ export const accept = functions.https.onCall(async (data, context) => {
     lastMessage: null,
   };
 
-  await firestore.collection("offers").add(offer);
+  const addResult = await firestore.collection("offers").add(offer);
 
   // Check if job is full
   if (await isJobFull(jobId)) {
     finishJob(jobId);
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  sendNewOfferNotification(offer.clientId!, offer.expertName, addResult.id, offer.serviceName);
 
   console.log("Job accepted: " + jobId);
 });
